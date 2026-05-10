@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Happy Birthday 🎉</title>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rose:    #ff4b7d;
+  --gold:    #ffd700;
+  --lavender:#c084fc;
+  --sky:     #38bdf8;
+  --mint:    #34d399;
+  --peach:   #fb923c;
+}
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body { width:100%; height:100%; overflow:hidden; background:#000; font-family:'Cormorant Garamond',serif; touch-action:manipulation; }
+
+/* ── CANVAS ── */
+#particleCanvas { position:fixed; inset:0; z-index:1; pointer-events:none; }
+
+/* ══════════════ SLIDESHOW ══════════════ */
+.slideshow { position:relative; width:100%; height:100dvh; z-index:2; }
+
+.slide {
+  position:absolute; inset:0; opacity:0;
+  animation: fadeCycle 120s infinite;
+}
+
+/* full photo visible — no cropping */
+.slide img {
+  width:100%; height:100%;
+  object-fit:contain;
+  object-position:center center;
+  background:#000;
+  position:absolute; top:0; left:0;
+  filter:brightness(0.82) saturate(1.12);
+  animation: safePan 14s ease-in-out infinite;
+  will-change:transform;
+}
+@keyframes safePan {
+  0%   { transform:scale(1.02) translate(  0px,  0px); }
+  25%  { transform:scale(1.03) translate(-8px, -5px); }
+  50%  { transform:scale(1.03) translate( 8px,  5px); }
+  75%  { transform:scale(1.02) translate(-5px,  8px); }
+  100% { transform:scale(1.02) translate(  0px,  0px); }
+}
+
+@keyframes fadeCycle {
+  0%   { opacity:0; z-index:3; }
+  2%   { opacity:1; }
+  7.5% { opacity:1; }
+  9%   { opacity:0; z-index:2; }
+  100% { opacity:0; z-index:2; }
+}
+
+/* colour tint per slide */
+.slide::before {
+  content:''; position:absolute; inset:0; z-index:1;
+  mix-blend-mode:color; opacity:0.3; pointer-events:none;
+}
+.slide:nth-child(1)::before  { background:var(--rose); }
+.slide:nth-child(2)::before  { background:var(--lavender); }
+.slide:nth-child(3)::before  { background:var(--gold); }
+.slide:nth-child(4)::before  { background:var(--mint); }
+.slide:nth-child(5)::before  { background:var(--sky); }
+.slide:nth-child(6)::before  { background:var(--peach); }
+.slide:nth-child(7)::before  { background:var(--rose); }
+.slide:nth-child(8)::before  { background:var(--lavender); }
+.slide:nth-child(9)::before  { background:var(--gold); }
+.slide:nth-child(10)::before { background:var(--mint); }
+.slide:nth-child(11)::before { background:var(--sky); }
+
+.overlay {
+  position:absolute; inset:0; z-index:2; pointer-events:none;
+  background:linear-gradient(to bottom,
+    rgba(0,0,0,0.08) 0%,
+    rgba(0,0,0,0.0)  40%,
+    rgba(0,0,0,0.55) 85%,
+    rgba(0,0,0,0.75) 100%);
+}
+
+/* light streak */
+.slide::after {
+  content:''; position:absolute; inset:0; z-index:3; pointer-events:none;
+  background:linear-gradient(125deg, transparent 30%, rgba(255,255,255,0.05) 50%, transparent 70%);
+  animation:streak 7s ease-in-out infinite alternate;
+}
+@keyframes streak {
+  0%   { transform:translateX(-50%) skewX(-20deg); opacity:0; }
+  50%  { opacity:1; }
+  100% { transform:translateX(150%) skewX(-20deg); opacity:0; }
+}
+
+/* ══════════════ MESSAGE CARD ══════════════ */
+.message {
+  position:absolute; bottom:0; left:0; right:0; z-index:10;
+  padding: clamp(18px,4vw,30px) clamp(20px,5vw,44px) clamp(22px,4vw,34px);
+  text-align:center; color:#fff;
+  background:linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.55) 60%, transparent 100%);
+}
+.message h1 {
+  font-family:'Italiana',serif;
+  font-size:clamp(1.6rem, 5.5vw, 3rem);
+  font-weight:400; letter-spacing:0.04em;
+  margin-bottom:clamp(6px,1.5vw,12px);
+  background:linear-gradient(135deg,#fff 0%,var(--gold) 55%,var(--rose) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  line-height:1.15;
+}
+.message p {
+  font-size:clamp(0.9rem, 2.8vw, 1.25rem);
+  font-style:italic; line-height:1.7; color:rgba(255,255,255,0.88);
+  max-width:560px; margin:0 auto;
+}
+.dots { display:flex; justify-content:center; gap:8px; margin-top:clamp(10px,2vw,16px); padding-bottom:2px; }
+.dots span {
+  width:5px; height:5px; border-radius:50%;
+  animation:dotPulse 2s ease-in-out infinite;
+}
+.dots span:nth-child(1){ background:var(--rose);     animation-delay:0s; }
+.dots span:nth-child(2){ background:var(--gold);     animation-delay:0.3s; }
+.dots span:nth-child(3){ background:var(--lavender); animation-delay:0.6s; }
+.dots span:nth-child(4){ background:var(--sky);      animation-delay:0.9s; }
+.dots span:nth-child(5){ background:var(--mint);     animation-delay:1.2s; }
+@keyframes dotPulse { 0%,100%{transform:scale(1);opacity:0.5} 50%{transform:scale(1.7);opacity:1} }
+
+/* ══════════════ PETALS ══════════════ */
+.petal {
+  position:fixed; top:-60px; z-index:20; pointer-events:none;
+  animation:petalFall linear forwards;
+}
+@keyframes petalFall {
+  0%   { transform:translateY(-60px) rotate(0deg) scale(0.8); opacity:0; }
+  8%   { opacity:1; }
+  90%  { opacity:0.7; }
+  100% { transform:translateY(110dvh) rotate(420deg) scale(1.1); opacity:0; }
+}
+
+/* ══════════════ PROGRESS BAR ══════════════ */
+.progressBar {
+  position:fixed; bottom:0; left:0; height:3px; z-index:30;
+  background:linear-gradient(90deg,var(--rose),var(--gold),var(--lavender),var(--sky),var(--mint),var(--rose));
+  background-size:300% 100%;
+  animation:progressAnim 120s linear forwards, gradShift 5s linear infinite;
+}
+@keyframes progressAnim { from{width:0} to{width:100%} }
+@keyframes gradShift    { 0%{background-position:0 0} 100%{background-position:300% 0} }
+
+/* ══════════════ START SCREEN ══════════════ */
+.startScreen {
+  position:fixed; inset:0; z-index:200;
+  background:radial-gradient(ellipse at 50% 40%, #1a0030 0%, #000 100%);
+  display:flex; flex-direction:column; justify-content:center;
+  align-items:center; gap:clamp(20px,4vh,36px);
+  padding:24px;
+}
+.startScreen .title {
+  font-family:'Italiana',serif;
+  font-size:clamp(2.4rem,8vw,4rem);
+  font-weight:400; text-align:center; line-height:1.1;
+  background:linear-gradient(135deg,#fff 0%,var(--gold) 50%,var(--rose) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  animation:titlePulse 3s ease-in-out infinite;
+}
+@keyframes titlePulse { 0%,100%{opacity:0.82;transform:scale(1)} 50%{opacity:1;transform:scale(1.025)} }
+.startScreen .subtitle {
+  font-style:italic; font-size:clamp(1rem,3vw,1.3rem);
+  color:rgba(255,255,255,0.48); letter-spacing:0.07em; text-align:center;
+}
+.startBtn {
+  padding:clamp(14px,2.5vh,18px) clamp(36px,8vw,56px);
+  border:none; border-radius:60px;
+  font-size:clamp(1rem,3vw,1.15rem); font-family:'Cormorant Garamond',serif;
+  letter-spacing:0.12em; font-weight:600;
+  background:linear-gradient(135deg,var(--rose),var(--lavender)); color:white;
+  cursor:pointer; box-shadow:0 0 36px rgba(255,75,125,0.55);
+  transition:transform 0.3s, box-shadow 0.3s; position:relative; overflow:hidden;
+}
+.startBtn::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg,transparent,rgba(255,255,255,0.28),transparent);
+  transform:translateX(-100%); transition:0.55s;
+}
+.startBtn:hover::before, .startBtn:active::before { transform:translateX(100%); }
+.startBtn:hover, .startBtn:active { transform:scale(1.07); box-shadow:0 0 52px rgba(255,75,125,0.75); }
+
+.heartFloat {
+  position:absolute; animation:floatUp linear infinite; opacity:0; pointer-events:none;
+  font-size:clamp(16px,3vw,22px);
+}
+@keyframes floatUp {
+  0%   { transform:translateY(100vh) rotate(-15deg); opacity:0; }
+  10%  { opacity:0.65; }
+  90%  { opacity:0.4; }
+  100% { transform:translateY(-10vh) rotate(15deg); opacity:0; }
+}
+
+/* ══════════════ PRANK OVERLAY ══════════════ */
+#prankOverlay {
+  position:fixed; inset:0; z-index:150;
+  background:rgba(0,0,0,0.8); backdrop-filter:blur(10px);
+  display:none; flex-direction:column;
+  align-items:center; justify-content:center; gap:14px;
+  padding:24px;
+}
+#prankMsg {
+  font-family:'Italiana',serif; font-size:clamp(1.5rem,5vw,2.4rem);
+  color:#fff; text-align:center; animation:titlePulse 2s ease-in-out infinite;
+}
+#prankSub {
+  font-style:italic; font-size:clamp(0.9rem,2.5vw,1.1rem);
+  color:rgba(255,255,255,0.48); text-align:center;
+}
+
+#continueBtn {
+  position:fixed; left:50%; bottom:22%; transform:translateX(-50%);
+  padding:clamp(14px,2.5vh,17px) clamp(32px,7vw,46px);
+  border:none; border-radius:50px;
+  font-size:clamp(0.95rem,2.8vw,1.08rem); font-family:'Cormorant Garamond',serif;
+  letter-spacing:0.1em; font-weight:700;
+  background:linear-gradient(135deg,var(--mint),var(--sky));
+  color:#0a0010; cursor:pointer;
+  box-shadow:0 0 28px rgba(52,211,153,0.5);
+  z-index:160; display:none; white-space:nowrap;
+  transition:left 0.14s ease, top 0.14s ease;
+}
+#continueBtn.unlocked {
+  background:linear-gradient(135deg,var(--gold),var(--peach)) !important;
+  box-shadow:0 0 40px rgba(255,215,0,0.7) !important;
+}
+
+#timerBar {
+  position:fixed; bottom:calc(22% - 56px); left:50%; transform:translateX(-50%);
+  z-index:160; display:none; flex-direction:column; align-items:center; gap:6px;
+}
+#timerTrack { width:170px; height:4px; background:rgba(255,255,255,0.14); border-radius:10px; overflow:hidden; }
+#timerFill  { height:100%; width:0%; border-radius:10px; background:linear-gradient(90deg,var(--rose),var(--gold),var(--mint)); transition:width 0.3s linear; }
+#timerLabel { font-style:italic; font-size:0.85rem; color:rgba(255,255,255,0.4); }
+
+/* ══════════════ FINALE ══════════════ */
+#finaleScreen {
+  position:fixed; inset:0; z-index:300;
+  background:radial-gradient(ellipse at 50% 35%,#1a002e 0%,#000 100%);
+  display:none; flex-direction:column; align-items:center; justify-content:center;
+  padding:40px 24px; animation:finaleIn 1.2s ease forwards;
+  text-align:center;
+}
+@keyframes finaleIn { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
+.finaleTitle {
+  font-family:'Italiana',serif; font-size:clamp(2.4rem,8vw,4rem); font-weight:400;
+  background:linear-gradient(135deg,#fff 0%,var(--gold) 50%,var(--rose) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  animation:titlePulse 3s ease-in-out infinite; line-height:1.15;
+  margin-bottom:10px;
+}
+.finaleSub {
+  font-style:italic; color:rgba(255,255,255,0.52);
+  font-size:clamp(1rem,3vw,1.25rem); margin-bottom:36px; letter-spacing:0.05em;
+}
+.replayBtn {
+  padding:clamp(13px,2vh,16px) clamp(34px,7vw,46px); border:none; border-radius:50px;
+  font-size:clamp(0.95rem,2.5vw,1.05rem); font-family:'Cormorant Garamond',serif;
+  letter-spacing:0.08em; cursor:pointer;
+  background:linear-gradient(135deg,var(--rose),var(--lavender)); color:white;
+  box-shadow:0 0 28px rgba(255,75,125,0.45); transition:transform 0.25s;
+}
+.replayBtn:hover, .replayBtn:active { transform:scale(1.07); }
+</style>
+</head>
+<body>
+
+<!-- START SCREEN -->
+<div class="startScreen" id="startScreen">
+  <div class="heartFloat" style="left:8%; animation-duration:8s;  animation-delay:0s;">🎈</div>
+  <div class="heartFloat" style="left:22%;animation-duration:11s; animation-delay:2s;">🌸</div>
+  <div class="heartFloat" style="left:50%;animation-duration:9s;  animation-delay:0.5s;">✨</div>
+  <div class="heartFloat" style="left:72%;animation-duration:12s; animation-delay:1.5s;">🎉</div>
+  <div class="heartFloat" style="left:88%;animation-duration:7s;  animation-delay:3s;">🌷</div>
+  <div class="title">Happy Birthday 🎉</div>
+  <div class="subtitle">A little surprise made just for you</div>
+  <button class="startBtn" onclick="startSurprise()">✨ Open Your Surprise ✨</button>
+</div>
+
+<!-- MUSIC -->
+<audio id="music" loop>
+  <source src="https://www.youtube.com/watch?v=l9O_SFcH4Kk&list=RDl9O_SFcH4Kk&start_radio=1" type="audio/mpeg">
+</audio>
+
+<canvas id="particleCanvas"></canvas>
+<div class="progressBar" id="progressBar" style="display:none;"></div>
+
+<!-- PRANK PAUSE -->
+<div id="prankOverlay">
+  <div id="prankMsg">⏸️ Taking a little break…</div>
+  <div id="prankSub">Click "Continue" whenever you're ready 😏</div>
+</div>
+<button id="continueBtn"
+  onmouseenter="dodgeBtn(event)"
+  ontouchstart="dodgeBtn(event)">
+  Continue ▶
+</button>
+<div id="timerBar">
+  <div id="timerTrack"><div id="timerFill"></div></div>
+  <div id="timerLabel">hold on… ⏳</div>
+</div>
+
+<!-- SLIDESHOW -->
+<div class="slideshow">
+
+  <div class="slide" style="animation-delay:0s;">
+    <img src="photo1.jpg" alt="">
+    <div class="overlay"></div>
+    <div class="message">
+      <h1>Happy Birthday 🎉</h1>
+      <p>Today is all about YOU —<br>go out and make it unforgettable!</p>
+      <div class="dots"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+  <div class="slide" style="animation-delay:10s;">
+    <img src="photo2.jpg" alt="">
+    <div class="overlay"></div>
+    <div class="message">
+      <h1>You Are Amazing ✨</h1>
+      <p>Your smile lights up every room you walk into.<br>Never stop shining.</p>
+      <div class="dots"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+  <div class="slide" style="animation-delay:20s;">
+    <img src="photo3.jpg" alt="">
+    <div class="overlay"></div>
+    <div class="message">
+      <h1>Keep Smiling 🌸</h1>
+      <p>I hope happiness follows you everywhere,<br>today and every single day after.</p>
+      <div class="dots"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+  <div class="slide" style="animation-delay:30s;">
+    <img src="photo4.jpg" alt="">
+    <div class="overlay"></div>
+    <div class="message">
+      <h1>You Matter 🌟</h1>
+      <p>The world is a better place<br>because you're in it.</p>
+      <div class="dots"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+  <div class="slide" style="animation-delay:40s;">
+    <img src="photo5.jpg" alt="">
+    <div class="overlay"></div>
+    <div class="message">
+      <h1>Enjoy Your Day 🎂</h1>
+      <p>Today is all about your laughter,<br>your joy, and all the good people around you.</p>
+      <div class="dots"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+  <div class="slide" style="animation-delay:50s;">
+    <img src="photo6.jpg" alt="">
+    <div class="overlay"></div>
+    <div class="message">
+      <h1>A Million Wishes 🌟</h1>
+      <p>May every dream you carry in your heart<br>find its way to you this year.</p>
+      <div class="dots"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+  <div class="slide" style="animation-delay:60s;">
+    <img src="photo7.jpg" alt="">
+    <div class="overlay"></div>
+    <div class="message">
+      <h1>This new year💫</h1>
+      <p>May this new year bring focus, progress,<br> and success in everything you do.</p>
+      <div class="dots"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+  <div class="slide" style="animation-delay:70s;">
+    <img src="photo8.jpg" alt="">
+    <div class="overlay"></div>
+    <div class="message">
+      <h1>Just like your name Shoshana 🌺</h1>
+      <p>May your life always bloom with beauty, <br>grace, and softness in all the right places.</p>
+      <div class="dots"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+  <div class="slide" style="animation-delay:80s;">
+    <img src="photo9.jpg" alt="">
+    <div class="overlay"></div>
+    <div class="message">
+      <h1>Here's to You 🥂</h1>
+      <p>To new adventures, new memories,<br>and a year full of everything you deserve.</p>
+      <div class="dots"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+  <div class="slide" style="animation-delay:90s;">
+    <img src="photo10.jpg" alt="">
+    <div class="overlay"></div>
+    <div class="message">
+      <h1>Happy Birthday!🙌</h1>
+      <p>Wishing you a day full of joy, <br>peace, and everything you love</p>
+      <div class="dots"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+  <div class="slide" style="animation-delay:100s;">
+    <img src="photo11.jpg" alt="">
+    <div class="overlay"></div>
+    <div class="message">
+      <h1>Happy Birthday, Friend 🎂🎉</h1>
+      <p>Wishing you a brilliant year ahead —<br>you deserve every single good thing coming your way.</p>
+      <div class="dots"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FINALE — no message form -->
+<div id="finaleScreen">
+  <div class="finaleTitle">That's all 🎉</div>
+  <div class="finaleSub">Hope that it put smile on your face 🌸</div>
+  <button class="replayBtn" onclick="location.reload()">🔁 Watch Again</button>
+</div>
+
+<script>
+/* ── PARTICLES ── */
+const canvas = document.getElementById('particleCanvas');
+const ctx    = canvas.getContext('2d');
+let particles = [], W, H;
+
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+resize(); window.addEventListener('resize', resize);
+
+const COLORS = ['#ff4b7d','#ffd700','#c084fc','#38bdf8','#34d399','#fb923c','#fff'];
+const rndColor = () => COLORS[Math.floor(Math.random() * COLORS.length)];
+
+class Particle {
+  constructor(b) {
+    this.x = b ? b.x : Math.random()*W;
+    this.y = b ? b.y : Math.random()*H;
+    this.r = b ? Math.random()*3+1 : Math.random()*2+0.5;
+    this.vx = b ? (Math.random()-0.5)*6 : (Math.random()-0.5)*0.4;
+    this.vy = b ? (Math.random()-0.5)*6 : (Math.random()-0.5)*0.4-0.3;
+    this.alpha = b ? 1 : Math.random();
+    this.color = rndColor();
+    this.life = b ? Math.random()*60+30 : Infinity;
+    this.decay = b ? 1/this.life : 0;
+    this.glow = Math.random()*8+2;
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy; this.alpha -= this.decay;
+    if (this.life !== Infinity) this.life--;
+    if (this.life === Infinity) {
+      if (this.x<0) this.x=W; if (this.x>W) this.x=0;
+      if (this.y<0) this.y=H; if (this.y>H) this.y=0;
+    }
+  }
+  draw() {
+    ctx.save(); ctx.globalAlpha = Math.max(0, this.alpha);
+    ctx.shadowBlur = this.glow; ctx.shadowColor = this.color; ctx.fillStyle = this.color;
+    ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI*2); ctx.fill(); ctx.restore();
+  }
+  isDead() { return this.life !== Infinity && this.life <= 0; }
+}
+
+for (let i=0; i<100; i++) particles.push(new Particle());
+
+function burst(x,y) { for (let i=0; i<26; i++) particles.push(new Particle({x,y})); }
+
+function animateCanvas() {
+  ctx.clearRect(0,0,W,H);
+  particles = particles.filter(p => !p.isDead());
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animateCanvas);
+}
+
+/* ── PETALS ── */
+const PETALS = ['🌸','🌹','🌺','💮','🌷','✨','💫','⭐','🎀','🎊','🎉','🎈'];
+function createPetal() {
+  const el = document.createElement('div');
+  el.classList.add('petal');
+  el.textContent = PETALS[Math.floor(Math.random()*PETALS.length)];
+  el.style.left = (Math.random()*100) + 'vw';
+  el.style.fontSize = (Math.random()*16+14) + 'px';
+  el.style.animationDuration = (Math.random()*6+5) + 's';
+  el.style.filter = `hue-rotate(${Math.random()*360}deg) drop-shadow(0 0 5px rgba(255,255,255,0.4))`;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 12000);
+}
+
+/* touch bursts */
+document.addEventListener('touchstart', e => {
+  if (document.getElementById('startScreen').style.display !== 'none') return;
+  const t = e.touches[0];
+  burst(t.clientX, t.clientY);
+}, {passive:true});
+document.addEventListener('click', e => {
+  if (document.getElementById('startScreen').style.display !== 'none') return;
+  burst(e.clientX, e.clientY);
+});
+
+/* mouse trail */
+let trailT;
+document.addEventListener('mousemove', e => {
+  clearTimeout(trailT);
+  trailT = setTimeout(() => {
+    for (let i=0; i<3; i++) {
+      const p = new Particle({x:e.clientX, y:e.clientY});
+      p.r=Math.random()*1.5+0.5; p.vx=(Math.random()-0.5)*1.5; p.vy=(Math.random()-0.5)*1.5;
+      p.life=25; p.decay=1/p.life; particles.push(p);
+    }
+  }, 16);
+});
+
+/* ══════════ PRANK ══════════ */
+let prankUnlocked = false, dodgeCount = 0;
+const PRANK_DURATION = 10000;
+let prankStart, timerInterval;
+
+const prankOverlay = document.getElementById('prankOverlay');
+const continueBtn  = document.getElementById('continueBtn');
+const timerBar     = document.getElementById('timerBar');
+const timerFill    = document.getElementById('timerFill');
+
+const TAUNTS = ['Nope! 😏','Too slow! 😂','Almost! 😄','Hehe 👀','Try again!','Nice try! 😆','Got you! 😜','Faster! 🏃'];
+
+function showPrank() {
+  document.querySelectorAll('.slide, .slide img').forEach(el => {
+    el.style.animationPlayState = 'paused';
+  });
+  document.getElementById('progressBar').style.animationPlayState = 'paused';
+  document.getElementById('music').pause();
+
+  prankOverlay.style.display = 'flex';
+  continueBtn.style.display  = 'block';
+  timerBar.style.display     = 'flex';
+  prankStart = Date.now();
+
+  timerInterval = setInterval(() => {
+    const elapsed = Date.now() - prankStart;
+    timerFill.style.width = Math.min(100, (elapsed/PRANK_DURATION)*100) + '%';
+    if (elapsed >= PRANK_DURATION) unlockButton();
+  }, 100);
+}
+
+function dodgeBtn(e) {
+  if (prankUnlocked) return;
+  if (e.cancelable) e.preventDefault();
+  dodgeCount++;
+  const btn = continueBtn;
+  const bw = btn.offsetWidth || 160, bh = btn.offsetHeight || 52, mg = 20;
+  let newL, newT, tries = 0;
+  const currL = parseFloat(btn.style.left) || W/2;
+  const currT = parseFloat(btn.style.top)  || H*0.78;
+  do {
+    newL = mg + Math.random()*(W - bw - mg*2);
+    newT = mg + Math.random()*(H - bh - mg*2);
+    tries++;
+  } while (tries < 12 && Math.abs(newL-currL)<90 && Math.abs(newT-currT)<50);
+  btn.style.transform = 'none';
+  btn.style.bottom    = 'auto';
+  btn.style.left      = newL + 'px';
+  btn.style.top       = newT  + 'px';
+  btn.textContent     = TAUNTS[dodgeCount % TAUNTS.length] + ' ▶';
+}
+
+function unlockButton() {
+  if (prankUnlocked) return;
+  prankUnlocked = true;
+  clearInterval(timerInterval);
+  timerFill.style.width = '100%';
+  continueBtn.classList.add('unlocked');
+  continueBtn.style.transition = 'left 0.4s ease, top 0.4s ease';
+  continueBtn.style.left      = '50%';
+  continueBtn.style.top       = '50%';
+  continueBtn.style.transform = 'translate(-50%,-50%)';
+  continueBtn.textContent     = '▶ Continue (got you! 😄)';
+  continueBtn.onclick         = resumeShow;
+  document.getElementById('timerLabel').textContent = 'Now click it! 🎉';
+}
+
+function resumeShow() {
+  if (!prankUnlocked) return;
+  prankOverlay.style.display = 'none';
+  continueBtn.style.display  = 'none';
+  timerBar.style.display     = 'none';
+  document.querySelectorAll('.slide, .slide img').forEach(el => {
+    el.style.animationPlayState = 'running';
+  });
+  document.getElementById('progressBar').style.animationPlayState = 'running';
+  document.getElementById('music').play();
+}
+
+/* ══════════ START ══════════ */
+function startSurprise() {
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('progressBar').style.display = 'block';
+
+  const music = document.getElementById('music');
+  music.volume = 0;
+  music.play().catch(() => {});
+  let vol = 0;
+  const fi = setInterval(() => { vol = Math.min(1, vol+0.02); music.volume = vol; if(vol>=1) clearInterval(fi); }, 80);
+
+  animateCanvas();
+  setInterval(createPetal, 380);
+  setInterval(() => burst(Math.random()*W, Math.random()*H*0.5), 3800);
+
+  setTimeout(showPrank,  30000);
+  setTimeout(showFinale, 120000);
+}
+
+/* ══════════ FINALE ══════════ */
+function showFinale() {
+  document.getElementById('finaleScreen').style.display = 'flex';
+  for (let i=0; i<7; i++) setTimeout(() => burst(Math.random()*W, Math.random()*H*0.6), i*180);
+}
+</script>
+</body>
+</html>
